@@ -2,11 +2,9 @@ import { Lead } from "../models/Lead.js";
 import { getActiveConfig } from "./configController.js";
 import { calculateEstimate, validateAnswers, EstimateValidationError } from "../services/calculator.js";
 
-// POST /api/estimate — public.
 export async function submitEstimate(req, res) {
   try {
     const { name, phone, email, answers } = req.body || {};
-
     if (!name || !phone || !email) {
       return res.status(400).json({ error: "name, phone, and email are required." });
     }
@@ -15,10 +13,6 @@ export async function submitEstimate(req, res) {
     }
 
     const config = await getActiveConfig();
-
-    // Re-validate against the CURRENT active config server-side. Never
-    // trust min/max/required rules the client may have applied — a
-    // visitor can call this endpoint directly with any payload.
     validateAnswers(config, answers);
 
     const { estimate_low, estimate_high } = calculateEstimate(config, answers);

@@ -1,47 +1,67 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
+import axios from "axios";
 
-async function request(path, { method = "GET", body, token } = {}) {
-  const headers = { "Content-Type": "application/json" };
-  if (token) headers.Authorization = `Bearer ${token}`;
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:4000/api";
 
-  const res = await fetch(`${API_URL}${path}`, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined,
-  });
-
-  let data = null;
-  try {
-    data = await res.json();
-  } catch {
-    // no JSON body (e.g. 204) — leave data null
-  }
-
-  if (!res.ok) {
-    const message = data?.error || `Request failed (${res.status})`;
-    const error = new Error(message);
-    error.status = res.status;
-    error.details = data?.details;
-    throw error;
-  }
-
-  return data;
-}
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 // --- Public estimator ---
-export const fetchPublicConfig = () => request("/config");
 
-export const submitEstimate = (payload) =>
-  request("/estimate", { method: "POST", body: payload });
+export const fetchPublicConfig = async () => {
+  const response = await api.get("/config");
+  return response.data;
+};
+
+export const submitEstimate = async (payload) => {
+  const response = await api.post("/estimate", payload);
+  return response.data;
+};
 
 // --- Owner auth ---
-export const ownerLogin = (username, password) =>
-  request("/auth/login", { method: "POST", body: { username, password } });
 
-// --- Owner panel (protected) ---
-export const fetchAdminConfig = (token) => request("/admin/config", { token });
+export const ownerLogin = async (username, password) => {
+  const response = await api.post("/auth/login", {
+    username,
+    password,
+  });
 
-export const saveAdminConfig = (token, config) =>
-  request("/admin/config", { method: "PUT", body: config, token });
+  return response.data;
+};
 
-export const fetchAdminLeads = (token) => request("/admin/leads", { token });
+// --- Owner panel ---
+
+export const fetchAdminConfig = async (token) => {
+  const response = await api.get("/admin/config", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
+
+export const saveAdminConfig = async (token, config) => {
+  const response = await api.put("/admin/config", config, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
+
+export const fetchAdminLeads = async (token) => {
+  const response = await api.get("/admin/leads", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};

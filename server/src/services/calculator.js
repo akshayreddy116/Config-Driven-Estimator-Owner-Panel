@@ -1,22 +1,4 @@
-/**
- * Server-side pricing engine. Pure function, no DB/HTTP awareness, so it can
- * be unit tested in isolation and so the pricing logic never has a code
- * path that lives in or is reachable from the browser.
- *
- * Formula (documented in full in DECISIONS.md):
- *   base_material_cost = roof_area * material.rate_per_sqft * (1 + waste_factor)
- *   tear_off_cost       = roof_area * layers.tear_off_per_sqft
- *   subtotal            = (base_material_cost + tear_off_cost) * pitch.multiplier * stories.multiplier
- *   mid_estimate        = subtotal + permit_flat_fee
- *   estimate_low        = mid_estimate * (1 - range_spread_pct)
- *   estimate_high       = mid_estimate * (1 + range_spread_pct)
- *
- * Only "select" questions that carry a pricing field (rate_per_sqft,
- * multiplier, tear_off_per_sqft) participate in the formula. A question
- * with none of those fields on its options (e.g. a future free-text
- * "notes" question) simply has no pricing effect — this keeps the engine
- * generic instead of hardcoding the four known question keys.
- */
+
 
 export class EstimateValidationError extends Error {
   constructor(message, details) {
@@ -31,12 +13,7 @@ function getSelectedOption(question, selectedValue) {
   return question.options.find((opt) => opt.value === String(selectedValue)) ?? null;
 }
 
-/**
- * Validates raw answers against the *active* questions in a config.
- * Throws EstimateValidationError with a list of per-field problems if
- * anything is missing, out of range, or references an option that
- * doesn't exist. Returns nothing on success.
- */
+
 export function validateAnswers(config, answers) {
   const problems = [];
   const activeQuestions = config.questions.filter((q) => q.active);
@@ -115,9 +92,6 @@ export function calculateEstimate(config, answers) {
   return {
     estimate_low: estimateLow,
     estimate_high: estimateHigh,
-    // Returned for transparency/debugging in the admin panel only — the
-    // public API response strips this (see estimateController.js) so a
-    // visitor can't reverse-engineer the rate table from the response.
     breakdown: {
       roof_area: roofArea,
       rate_per_sqft: ratePerSqft,
