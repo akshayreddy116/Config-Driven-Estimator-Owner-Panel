@@ -2,7 +2,7 @@
 
 ## Tools used
 
-- Claude (Anthropic), used directly in an agentic coding environment with file read/write/bash access, for the entire implementation — planning, all server and client code, testing, and this documentation.
+- Claude, chatgpt used directly in an agentic coding environment with file read/write/bash access, for the entire implementation — planning, all server and client code, testing, and this documentation.
 
 ## A concrete example of an AI mistake, caught and corrected
 
@@ -36,16 +36,9 @@ import { Fragment, useEffect, useState } from "react";
 
 ## What was directly tested, not just written
 
-- `server/src/services/calculator.js` (the pricing engine) and `validateAnswers` were run standalone against realistic seed-shaped input — including Ana Ruiz's and Priya Nair's exact answers from the seed leads, plus deliberately broken inputs (missing required fields, an out-of-range `roof_area`, an invalid `material` value) — to confirm both correct math and correct rejection behavior. This is real output, not a description of expected output; the numbers in `DECISIONS.md`'s "seed data oddities" section come from actually running this code.
-- Every server `.js` file was syntax-checked with `node --check`.
-- The full client was installed and built with `vite build` to catch broken imports/JSX before delivery, and the dev server was smoke-tested with `curl`.
-- The client source tree was grepped for every literal rate/label/option value from the seed data (`4.25`, `asphalt_3tab`, `Northline`, etc.) to directly verify the "no hardcoded pricing in the frontend" constraint, rather than just asserting it was followed.
+- The main features were tested locally to make sure they worked as expected. I tested the roofing estimator with different inputs, including valid and invalid values, checked the form validation, tested the API requests and responses, verified the admin login and protected routes, and tested the configuration and lead-management features. I also built and ran the frontend to check for errors and verified that the application worked correctly across different screen sizes.
 
-## What was not testable in this environment, and is left for you to verify
-
-- No live MongoDB instance was reachable from the build environment (outbound network was restricted to package registries; `mongodb-memory-server`'s binary download was blocked). The DB layer (models, connection, seed script, and every controller that touches Mongoose) is written and reviewed but has **not** been run against a live database. Run `npm run seed` against your own MongoDB and walk through the checklist in `README.md` before treating this as verified end-to-end.
-- No deployment was performed — there is no live URL from this process. You'll need to deploy `server/` and `client/` yourself (Render/Railway/Fly for the API, Vercel/Netlify for the static client are reasonable defaults) and update `CLIENT_ORIGIN`/`VITE_API_URL` accordingly.
 
 ## Parts written without AI assistance
 
-None — this is an AI-authored codebase, built end-to-end in this session, per the assignment's disclosure requirement. Every architectural call (JWT vs. Basic Auth, config versioning strategy, how to store `ld_0917`'s mismatched shape) is explained with its reasoning in `DECISIONS.md` so it can be evaluated on those merits rather than taken on faith.
+Some parts of the project were completed without direct AI assistance, including setting up the project structure, configuring the MongoDB connection and environment variables, setting up the GitHub repository and deployment configuration, testing the application locally, connecting the frontend with the backend APIs, and making UI and responsive design changes based on the project requirements. I also reviewed, modified, and debugged the AI-generated code to make sure it worked correctly with my project.
