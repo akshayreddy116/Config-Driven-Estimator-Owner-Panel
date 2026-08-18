@@ -100,56 +100,8 @@ https://config-driven-estimator-owner-panel-1.onrender.com
              │ Protected API │             │ Leads         │
              └───────────────┘             └───────────────┘
 
-## Running locally from a clean clone
-
-**1. Install dependencies for both apps:**
-
-```bash
-npm run install:all
-```
-
-(or manually: `cd server && npm install`, then `cd ../client && npm install`)
-
-**2. Configure the server:**
-
-```bash
-cd server
-
-```
-
-Edit `.env`:
-
-| Variable | Description |
-|---|---|
-| `MONGODB_URI` | Your MongoDB connection string, e.g. `mongodb://127.0.0.1:27017/roof-estimator` |
-| `PORT` | API port (default `4000`) |
-| `CLIENT_ORIGIN` | Where the frontend runs, for CORS (default `http://localhost:5173`) |
-| `JWT_SECRET` | Any long random string — signs owner-panel session tokens |
-| `ADMIN_USERNAME` | Owner login username (default `admin`) |
-| `ADMIN_PASSWORD` | Owner login password (default `roofing2026!`) |
-
-**3. Seed the database** with the provided config (v3) and the three sample leads:
-
-```bash
-npm run seed
-```
-
-Re-running this wipes and re-seeds — safe to run repeatedly during development, but don't run it against data you want to keep.
-
-**4. Configure the client:**
-
-```bash
-cd ../client
-
-```
 
 
-
-## Admin test credentials
-
-```
-Username: admin
-Password: admin@123
 ```
 # 💻 Running Locally
 
@@ -237,6 +189,11 @@ http://localhost:4000
 ```
 
 
+## Admin test credentials
+
+```
+Username: admin
+Password: admin@123
 ---
 
 ## 🧪 Testing
