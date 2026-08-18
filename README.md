@@ -1,6 +1,6 @@
-# Northline Roofing & Exteriors — Estimator
+# Configuration-driven roofing estimator
 
-A configuration-driven roofing estimator. A public multi-step wizard calculates a cost estimate entirely from data stored in MongoDB (no question, label, option, or rate is hardcoded in the frontend), and an authenticated owner panel lets a non-technical user edit those rates/labels/toggles and view captured leads — with changes going live immediately, no redeploy.
+ A public multi-step wizard calculates a cost estimate entirely from data stored in MongoDB (no question, label, option, or rate is hardcoded in the frontend), and an authenticated owner panel lets a non-technical user edit those rates/labels/toggles and view captured leads — with changes going live immediately, no redeploy.
 
 **Live URLs:** *Not deployed from the build environment — see `AI_LOG.md` for why. Deploy steps are below.*
 
