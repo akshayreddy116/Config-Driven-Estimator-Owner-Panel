@@ -1,24 +1,87 @@
-# Configuration-driven roofing estimator
+# Configuration-Driven Roofing Estimator
 
- A public multi-step wizard calculates a cost estimate entirely from data stored in MongoDB (no question, label, option, or rate is hardcoded in the frontend), and an authenticated owner panel lets a non-technical user edit those rates/labels/toggles and view captured leads — with changes going live immediately, no redeploy.
+A full-stack roofing cost estimation application with a customer-facing estimator and an authenticated owner panel.
 
-**Live URLs:** *Not deployed from the build environment — see `AI_LOG.md` for why. Deploy steps are below.*
+The application is **configuration-driven**: questions, options, pricing rates, and modifiers are stored in MongoDB instead of being hardcoded in the frontend. The owner can update the configuration from the Owner Panel, and the changes are immediately reflected in the public estimator without redeploying the application.
 
-## Project structure
+---
 
-```
-roof-estimator/
-├── server/     Express API + MongoDB (Mongoose)
-├── client/     React (Vite) + Tailwind — public estimator at "/", owner panel at "/admin"
-├── DECISIONS.md
-├── AI_LOG.md
-└── README.md
-```
+## Features
 
-## Prerequisites
+### Public Estimator
 
-- Node.js 18+
-- A MongoDB instance — either local (`mongod` running on `localhost:27017`) or a free [MongoDB Atlas](https://www.mongodb.com/atlas) cluster.
+- Multi-step roofing estimation wizard
+- Dynamic questions and options loaded from MongoDB
+- Roofing cost calculation based on customer answers
+- Estimated price range displayed to the customer
+- Customer lead capture
+- Responsive interface
+
+### Owner Panel
+
+- Owner login with JWT authentication
+- Edit pricing rates
+- Edit customer questions and labels
+- Edit question options
+- Enable or disable questions
+- Update pricing modifiers
+- View submitted customer leads
+- Configuration changes are reflected without redeployment
+
+---
+
+## Tech Stack
+
+- **Frontend:** React.js, Vite, Tailwind CSS
+- **API Communication:** Axios
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB, Mongoose
+- **Authentication:** JWT
+- **Frontend Deployment:** Vercel
+- **Backend Deployment:** Render
+
+---
+
+## System Architecture
+
+```text
+                         ┌──────────────────────┐
+                         │      Customer        │
+                         │                      │
+                         │  Public Estimator    │
+                         └──────────┬───────────┘
+                                    │
+                                    │ HTTP / Axios
+                                    ▼
+                         ┌──────────────────────┐
+                         │    React Frontend    │
+                         │      (Vercel)        │
+                         │                      │
+                         │  /        Estimator  │
+                         │  /admin   Owner Panel│
+                         └──────────┬───────────┘
+                                    │
+                                    │ REST API
+                                    ▼
+                         ┌──────────────────────┐
+                         │   Express Backend   │
+                         │       (Render)       │
+                         │                      │
+                         │  Config API          │
+                         │  Estimate API        │
+                         │  Auth API             │
+                         │  Admin API            │
+                         └──────────┬───────────┘
+                                    │
+                     ┌──────────────┴──────────────┐
+                     │                             │
+                     ▼                             ▼
+             ┌───────────────┐             ┌───────────────┐
+             │   JWT Auth    │             │    MongoDB    │
+             │               │             │               │
+             │ Owner Login   │             │ Config        │
+             │ Protected API │             │ Leads         │
+             └───────────────┘             └───────────────┘
 
 ## Running locally from a clean clone
 
@@ -83,7 +146,7 @@ npm run dev:client   # http://localhost:5173
 
 ```
 Username: admin
-Password: roofing2026!
+Password: admin@123
 ```
 
 (from `server/.env.example` — change these before any real deployment)
