@@ -212,17 +212,6 @@ Password: admin@123
 
 ## Public Estimator
 
-Local:
-
-text
-http://localhost:5173/
-
-
-Production:
-
-text
-https://config-driven-estimator-ow-git-af08cf-akshays-projects-207531dc.vercel.app/
-
 
 Customers can:
 
@@ -318,16 +307,7 @@ Authorization: Bearer <JWT>
 
 The backend verifies the JWT before allowing access to protected owner routes.
 
-### Local Development Credentials
 
-text
-Username: admin
-Password: roofing2026!
-
-
-These values come from the server .env file.
-
-*Change these credentials before using the application in a real production environment.*
 
 ---
 
