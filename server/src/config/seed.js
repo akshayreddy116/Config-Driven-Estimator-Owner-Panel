@@ -4,14 +4,7 @@ import { connectDB } from "./db.js";
 import { Config } from "../models/Config.js";
 import { Lead } from "../models/Lead.js";
 
-/**
- * Seed data as provided in the brief, verbatim, with two deliberate
- * normalizations documented in DECISIONS.md:
- *   1. pitch.medium.multiplier was the string "1.12" — cast to Number.
- *   2. Each question gets an explicit `order` so display order is
- *      guaranteed rather than relying on array position.
- * Everything else — values, labels, structure — is untouched.
- */
+
 const SEED_CONFIG = {
   config_version: 3,
   business: { name: "Northline Roofing & Exteriors", region: "Columbus, OH", currency: "USD" },
@@ -84,9 +77,6 @@ const SEED_CONFIG = {
   modifiers: { waste_factor: 0.1, permit_flat_fee: 350, range_spread_pct: 12 },
 };
 
-// Historical leads, exactly as provided. ld_0917 references config_version 1
-// (a version we don't have a Config document for) and a different answer
-// shape — we store it as-is; see DECISIONS.md for why we don't backfill it.
 const SEED_LEADS = [
   {
     name: "Ana Ruiz",
