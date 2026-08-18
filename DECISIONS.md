@@ -46,10 +46,6 @@ The reasoning: if a homeowner has `GET /api/config`'s response sitting in their 
 - **Question reordering UI, adding/removing questions entirely.** The owner can edit labels/rates/toggle active, per the brief. Reordering and adding brand-new question types would need a more complex form builder than "edit rates and turn a question on or off" calls for.
 - **Rate limiting / bot protection on the public endpoints.** `POST /api/estimate` has no throttling. Fine for a review submission; not fine for production with real traffic — flagged below.
 
-## Questions to ask Dale before a real launch
-
-1. What should happen to a lead whose `config_version` no longer exists at all (imagine v3 gets deleted, not just superseded)? Right now nothing breaks — the lead just displays its raw stored answers — but is there a business reason to keep a read-only snapshot of retired question sets, e.g. for compliance?
-2. Should previously-submitted estimates ever be recalculated (e.g., "we underpriced Q2, resend everyone an updated quote"), or are historical Lead estimates meant to be permanently frozen? The current design assumes frozen.
 3. Is a single shared owner/bookkeeper login acceptable long-term, or does Marcus need his own account with fewer permissions than Dale (e.g., can view leads but not change rates)?
 4. What's the expected traffic volume on the public estimator? The current build has no rate limiting on `/api/estimate` — fine for a demo, not fine if a bot could hammer it and fill the leads table with garbage.
 5. Does "range spread" (12%) need to vary per material or region, or is one global spread percentage fine indefinitely?
