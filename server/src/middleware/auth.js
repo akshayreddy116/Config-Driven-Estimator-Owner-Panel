@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 
 export function requireOwnerAuth(req, res, next) {
   const header = req.headers.authorization || "";
+  console.log("AUTH HEADER:", req.headers.authorization);
   const token = header.startsWith("Bearer ") ? header.slice(7) : null; 
 
   if (!token) {

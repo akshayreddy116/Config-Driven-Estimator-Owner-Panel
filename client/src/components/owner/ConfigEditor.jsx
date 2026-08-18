@@ -28,9 +28,13 @@ function OptionEditor({ option, onChange }) {
         <Input
           label="Option label"
           value={option.label}
-          onChange={(e) => onChange({ ...option, label: e.target.value })}
+          onChange={(e) =>
+            onChange({
+              ...option,
+              label: e.target.value,
+            })
+          }
         />
-
         {fields.map((field) => (
           <Input
             key={field}
@@ -39,7 +43,10 @@ function OptionEditor({ option, onChange }) {
             step="any"
             value={option[field] ?? ""}
             onChange={(e) =>
-              onChange({ ...option, [field]: Number(e.target.value) })
+              onChange({
+                ...option,
+                [field]: Number(e.target.value),
+              })
             }
           />
         ))}
@@ -56,7 +63,12 @@ function QuestionEditor({ question, onChange }) {
           <Input
             label="Customer question"
             value={question.label}
-            onChange={(e) => onChange({ ...question, label: e.target.value })}
+            onChange={(e) =>
+              onChange({
+                ...question,
+                label: e.target.value,
+              })
+            }
           />
           <p className="mt-1 text-xs text-slate-400">
             Field: {question.key}
@@ -68,7 +80,10 @@ function QuestionEditor({ question, onChange }) {
             type="checkbox"
             checked={question.active}
             onChange={(e) =>
-              onChange({ ...question, active: e.target.checked })
+              onChange({
+                ...question,
+                active: e.target.checked,
+              })
             }
             className="h-4 w-4 accent-emerald-600"
           />
@@ -83,7 +98,10 @@ function QuestionEditor({ question, onChange }) {
             type="number"
             value={question.min ?? ""}
             onChange={(e) =>
-              onChange({ ...question, min: Number(e.target.value) })
+              onChange({
+                ...question,
+                min: Number(e.target.value),
+              })
             }
           />
           <Input
@@ -91,7 +109,10 @@ function QuestionEditor({ question, onChange }) {
             type="number"
             value={question.max ?? ""}
             onChange={(e) =>
-              onChange({ ...question, max: Number(e.target.value) })
+              onChange({
+                ...question,
+                max: Number(e.target.value),
+              })
             }
           />
         </div>
@@ -106,7 +127,10 @@ function QuestionEditor({ question, onChange }) {
               onChange={(updated) => {
                 const options = [...question.options];
                 options[index] = updated;
-                onChange({ ...question, options });
+                onChange({
+                  ...question,
+                  options,
+                });
               }}
             />
           ))}
@@ -116,24 +140,29 @@ function QuestionEditor({ question, onChange }) {
   );
 }
 
-export default function ConfigEditor({ token, onAuthError }) {
+export default function ConfigEditor({ onAuthError }) {
   const [config, setConfig] = useState(null);
   const [error, setError] = useState("");
   const [status, setStatus] = useState("idle");
 
   useEffect(() => {
-    fetchAdminConfig(token)
+    fetchAdminConfig()
       .then(setConfig)
       .catch((err) => {
-        if (err.status === 401) return onAuthError?.();
+        if (err.status === 401) {
+          return onAuthError?.();
+        }
         setError(err.message);
       });
-  }, [token]);
+  }, [onAuthError]);
 
   const updateQuestion = (index, question) => {
     const questions = [...config.questions];
     questions[index] = question;
-    setConfig({ ...config, questions });
+    setConfig({
+      ...config,
+      questions,
+    });
     setStatus("idle");
   };
 
@@ -150,9 +179,10 @@ export default function ConfigEditor({ token, onAuthError }) {
 
   const save = async () => {
     setStatus("saving");
+    setError("");
 
     try {
-      const saved = await saveAdminConfig(token, {
+      const saved = await saveAdminConfig({
         business: config.business,
         questions: config.questions,
         modifiers: config.modifiers,
@@ -160,27 +190,34 @@ export default function ConfigEditor({ token, onAuthError }) {
 
       setConfig(saved);
       setStatus("saved");
-      setTimeout(() => setStatus("idle"), 2500);
+
+      setTimeout(() => {
+        setStatus("idle");
+      }, 2500);
     } catch (err) {
-      if (err.status === 401) return onAuthError?.();
+      if (err.status === 401) {
+        return onAuthError?.();
+      }
       setError(err.message);
       setStatus("error");
     }
   };
 
-  if (error)
+  if (error) {
     return (
       <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-600">
         {error}
       </div>
     );
+  }
 
-  if (!config)
+  if (!config) {
     return (
       <div className="flex min-h-40 items-center justify-center text-sm text-slate-400">
         Loading configuration...
       </div>
     );
+  }
 
   const questions = [...config.questions].sort(
     (a, b) => (a.order ?? 0) - (b.order ?? 0)
@@ -188,7 +225,6 @@ export default function ConfigEditor({ token, onAuthError }) {
 
   return (
     <div className="mx-auto w-full max-w-6xl space-y-6">
-      {/* Header */}
       <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-xl font-bold text-slate-900">
@@ -215,7 +251,6 @@ export default function ConfigEditor({ token, onAuthError }) {
         </button>
       </div>
 
-      {/* Pricing */}
       <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
         <div className="mb-5">
           <h3 className="font-bold text-slate-900">Pricing Modifiers</h3>
@@ -257,7 +292,6 @@ export default function ConfigEditor({ token, onAuthError }) {
         </div>
       </section>
 
-      {/* Questions */}
       <section>
         <div className="mb-4">
           <h3 className="font-bold text-slate-900">Estimator Questions</h3>
