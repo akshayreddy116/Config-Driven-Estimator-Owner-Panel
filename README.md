@@ -34,7 +34,7 @@ npm run install:all
 
 ```bash
 cd server
-cp .env.example .env
+
 ```
 
 Edit `.env`:
@@ -60,7 +60,7 @@ Re-running this wipes and re-seeds — safe to run repeatedly during development
 
 ```bash
 cd ../client
-cp .env.example .env
+
 ```
 
 Edit `.env` if your API isn't on the default port:
@@ -100,15 +100,3 @@ Password: roofing2026!
 - **Server:** any Node host that supports environment variables and long-running processes (Render, Railway, Fly.io). Point `MONGODB_URI` at an Atlas cluster; set `CLIENT_ORIGIN` to your deployed frontend's URL.
 - **Client:** `npm run build` inside `client/` produces a static `dist/` folder — deploy to Vercel, Netlify, or any static host. Set `VITE_API_URL` to your deployed API's URL before building.
 
-## API reference
-
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| GET | `/api/config` | Public | Active questions + business info |
-| POST | `/api/estimate` | Public | Submit contact + answers, get an estimate range, stores a lead |
-| POST | `/api/auth/login` | Public | Owner login, returns a JWT |
-| GET | `/api/admin/config` | Bearer token | Full config incl. inactive questions |
-| PUT | `/api/admin/config` | Bearer token | Save edits, publishes a new config version |
-| GET | `/api/admin/leads` | Bearer token | All captured leads, most recent first |
-
-See `DECISIONS.md` for the pricing formula and architectural reasoning.
